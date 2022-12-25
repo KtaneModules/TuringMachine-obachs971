@@ -204,6 +204,9 @@ public class PuzzleGen {
         string[] poss = { "1st and 2nd", "1st and 3rd", "2nd and 3rd" };
         specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { ">" }, new string[] { poss[2], poss[1], poss[0] }, solution));
         specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { "<" }, new string[] { poss[2], poss[1], poss[0] }, solution));
+        // Position Compare Positions
+        for(int i = 0; i < 3; i++)
+            specialClues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", ">" }, new string[] { poss[2 - i] }, solution));
         // Evens Compare Odds
         specialClues.Add(new Clue(new string[] { "Evens" }, new string[] { "<", ">" }, new string[] { "Odds" }, solution));
         // Evens Compare Number
