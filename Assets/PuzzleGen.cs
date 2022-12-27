@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PuzzleGen {
-    private readonly int NUM_UNIQUE_CHANCES = 1;
 
     private Dictionary<string, int> clueMatDict = new Dictionary<string, int>()
     {
@@ -142,7 +141,13 @@ public class PuzzleGen {
                     clues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", "=", ">" }, new string[] { pos1[j] }, solution));
             }
         }
-        
+        // 2 Positions Compare Number
+        string[] poss = { "1st and 2nd", "1st and 3rd", "2nd and 3rd" };
+        for(int i = 0; i < 3; i++)
+        {
+            for(int j = 2; j <= 4; j++)
+                clues.Add(new Clue(new string[] { poss[i] }, new string[] { "<", ">" }, new string[] { j + "" }, solution));
+        }
         // 3 Sum Divisible by 2
         clues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
         // 2 Sum Compare Number
@@ -169,8 +174,15 @@ public class PuzzleGen {
         string[] pos2D = { "|1st - 2nd|", "|1st - 3rd|", "|2nd - 3rd|" };
         for (int i = 0; i < 3; i++)
         {
-            for(int j = 1; j <= 3; j++)
-                clues.Add(new Clue(new string[] { pos2D[i] }, new string[] { "<", "=", ">" }, new string[] { j + "" }, solution));
+            for(int j = 0; j <= 4; j++)
+            {
+                if(j == 0)
+                    clues.Add(new Clue(new string[] { pos2D[i] }, new string[] { "=", ">" }, new string[] { j + "" }, solution));
+                else if(j == 4)
+                    clues.Add(new Clue(new string[] { pos2D[i] }, new string[] { "<", "=" }, new string[] { j + "" }, solution));
+                else
+                    clues.Add(new Clue(new string[] { pos2D[i] }, new string[] { "<", "=", ">" }, new string[] { j + "" }, solution));
+            }
         }
         // Position Compare 2 Difference
         for (int i = 0; i < 3; i++)
@@ -201,10 +213,9 @@ public class PuzzleGen {
         specialClues.Add(new Clue(new string[] { "Distinct Numbers" }, new string[] { "=" }, new string[] { "1", "2", "3" }, solution));
         specialClues.Add(new Clue(new string[] { "Distinct Numbers" }, new string[] { "=" }, new string[] { "1", "2", "3" }, solution));
         // Largest/Smallest
-        string[] poss = { "1st and 2nd", "1st and 3rd", "2nd and 3rd" };
         specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { ">" }, new string[] { poss[2], poss[1], poss[0] }, solution));
         specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { "<" }, new string[] { poss[2], poss[1], poss[0] }, solution));
-        // Position Compare Positions
+        // Position Compare 2 Positions
         for(int i = 0; i < 3; i++)
             specialClues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", ">" }, new string[] { poss[2 - i] }, solution));
         // Evens Compare Odds
@@ -233,10 +244,10 @@ public class PuzzleGen {
         //Positions Not Divisible by 2
         hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "!/" }, new string[] { "2" }, solution));
         // 2 Positions Compare Number
-        for (int i = 1; i <= 3; i++)
-            hardClues.Add(new Clue(new string[] { i + "" }, new string[] { "<" }, new string[] { poss[0], poss[1], poss[2] }, solution));
-        for (int i = 3; i <= 5; i++)
-            hardClues.Add(new Clue(new string[] { i + "" }, new string[] { ">" }, new string[] { poss[0], poss[1], poss[2] }, solution));
+        for (int i = 2; i <= 5; i++)
+            hardClues.Add(new Clue(new string[] { poss[0], poss[1], poss[2] }, new string[] { "<" }, new string[] { i + "" }, solution));
+        for (int i = 1; i <= 4; i++)
+            hardClues.Add(new Clue(new string[] { poss[0], poss[1], poss[2] }, new string[] { ">" }, new string[] { i + "" }, solution));
         //3 Sum Divisible by Number
         hardClues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/" }, new string[] { "3", "4", "5" }, solution));
         hardClues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "!/" }, new string[] { "3", "4", "5" }, solution));
@@ -247,19 +258,19 @@ public class PuzzleGen {
         for (int i = 2; i <= 10; i++)
             hardClues.Add(new Clue(new string[] { pos2[0], pos2[1], pos2[2] }, new string[] { "=" }, new string[] { i + "" }, solution));
         //2 Sums Less Than Number
-        for (int i = 4; i <= 10; i++)
+        for (int i = 3; i <= 10; i++)
             hardClues.Add(new Clue(new string[] { pos2[0], pos2[1], pos2[2] }, new string[] { "<" }, new string[] { i + "" }, solution));
         //2 Sums Greater Than Number
-        for (int i = 2; i <= 8; i++)
+        for (int i = 2; i <= 9; i++)
             hardClues.Add(new Clue(new string[] { pos2[0], pos2[1], pos2[2] }, new string[] { ">" }, new string[] { i + "" }, solution));
         //2 Differences Equals Number
         for (int i = 0; i <= 4; i++)
             hardClues.Add(new Clue(new string[] { pos2D[0], pos2D[1], pos2D[2] }, new string[] { "=" }, new string[] { i + "" }, solution));
         //2 Differences Less Than Number
-        for (int i = 2; i <= 4; i++)
+        for (int i = 1; i <= 4; i++)
             hardClues.Add(new Clue(new string[] { pos2D[0], pos2D[1], pos2D[2] }, new string[] { "<" }, new string[] { i + "" }, solution));
         //2 Differences Greater Than Number
-        for (int i = 0; i <= 2; i++)
+        for (int i = 0; i <= 3; i++)
             hardClues.Add(new Clue(new string[] { pos2D[0], pos2D[1], pos2D[2] }, new string[] { ">" }, new string[] { i + "" }, solution));
     }
 

@@ -118,7 +118,6 @@ public class TuringMachine : MonoBehaviour {
 	}
 	void pressedClear()
 	{
-		Debug.Log("a");
 		audio.PlaySoundAtTransform(buttonSFX.name, transform);
 		posIndex = 0;
 		foreach (TextMesh text in numberText)

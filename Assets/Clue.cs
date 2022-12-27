@@ -120,19 +120,19 @@ public class Clue {
 		{
 			case "<":
 				bool f1 = true;
-				int val1 = strToValues(left, digits)[0];
-				int[] vals1 = strToValues(right, digits);
-				foreach (int value in vals1)
-					f1 = f1 && (val1 < value);
+				int[] l1 = strToValues(left, digits);
+				int[] r1 = strToValues(right, digits);
+				for(int i = 0; i < l1.Length || i < r1.Length; i++)
+					f1 = f1 && (l1[i % l1.Length] < r1[i % r1.Length]);
 				return f1;
 			case "=":
 				return strToValues(left, digits)[0] == strToValues(right, digits)[0];
 			case ">":
 				bool f2 = true;
-				int val2 = strToValues(left, digits)[0];
-				int[] vals2 = strToValues(right, digits);
-				foreach (int value in vals2)
-					f2 = f2 && (val2 > value);
+				int[] l2 = strToValues(left, digits);
+				int[] r2 = strToValues(right, digits);
+				for (int i = 0; i < l2.Length || i < r2.Length; i++)
+					f2 = f2 && (l2[i % l2.Length] > r2[i % r2.Length]);
 				return f2;
 			case "/":
 				return strToValues(left, digits)[0] % strToValues(right, digits)[0] == 0;
