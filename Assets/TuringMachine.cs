@@ -8,6 +8,7 @@ public class TuringMachine : MonoBehaviour {
 	private int NUM_TEST_RESET = 125; //This is the number of tests that the user must do before the user can test duplicate combinations
 	private static int moduleCount = 1;
 	private int moduleId;
+	private bool moduleSolved;
 	public KMBombModule module;
 	public new KMAudio audio;
 	public KMSelectable[] verifiers;
@@ -117,6 +118,7 @@ public class TuringMachine : MonoBehaviour {
 	}
 	void pressedClear()
 	{
+		Debug.Log("a");
 		audio.PlaySoundAtTransform(buttonSFX.name, transform);
 		posIndex = 0;
 		foreach (TextMesh text in numberText)
@@ -186,16 +188,22 @@ public class TuringMachine : MonoBehaviour {
 		}
 		foreach (MeshRenderer screen in mainScreen)
 			screen.material = blankMat;
+		yield return new WaitForSeconds(0.05f);
 		if(solve)
 		{
 			foreach (TextMesh text in numberText)
 				text.text = "";
 			audio.PlaySoundAtTransform(solveSFX.name, transform);
 			module.HandlePass();
+			moduleSolved = true;
 		}
 		else
 		{
-			module.HandleStrike();
+			if (!_strikeAvoid)
+				module.HandleStrike();
+			else
+				Debug.LogFormat("[Turing Machine #{0}] Strike prevented in autosolver.", moduleId);
+			_strikeAvoid = false;
 			gen.generatePuzzle(blankMat, clueMatList);
 			solution = gen.getSolution();
 			clues = gen.getClues();
@@ -265,7 +273,7 @@ public class TuringMachine : MonoBehaviour {
 #pragma warning restore 414
 	IEnumerator ProcessTwitchCommand(string command)
 	{
-		string[] param = command.ToUpper().Split(' ');
+		string[] param = command.ToUpperInvariant().Split(' ');
 		if ((Regex.IsMatch(param[0], @"^\s*PRESS\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) || Regex.IsMatch(param[0], @"^\s*P\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) && param.Length > 1)
 		{
 			if (isButton(param))
@@ -346,5 +354,31 @@ public class TuringMachine : MonoBehaviour {
 			}
 		}
 		return true;
+	}
+
+	private bool _strikeAvoid;
+
+	private IEnumerator TwitchHandleForcedSolve()
+	{
+		_strikeAvoid = true;
+		while (clear.OnInteract == null)
+			yield return true;
+		_strikeAvoid = false;
+		yield return new WaitForSeconds(0.1f);
+		var sol = solution.Join("");
+		var input = numberText[0].text + numberText[1].text + numberText[2].text;
+		if (!sol.StartsWith(input))
+        {
+			clear.OnInteract();
+			yield return new WaitForSeconds(0.1f);
+        }
+		for (int i = input.Length; i < sol.Length; i++)
+		{
+			numbers[sol[i] - '0' - 1].OnInteract();
+			yield return new WaitForSeconds(0.1f);
+		}
+		submit.OnInteract();
+		while (!moduleSolved)
+			yield return true;
 	}
 }
