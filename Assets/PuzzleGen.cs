@@ -157,6 +157,9 @@ public class PuzzleGen {
         // 2 Position Divisible by 2
         foreach(string pos in pos2)
             clues.Add(new Clue(new string[] { pos }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
+        // Position Compares 2 Positions
+        for (int i = 0; i < 3; i++)
+            clues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", ">" }, new string[] { pos2[2 - i] }, solution));
         // 2 Sum Compares Number
         string[] sum2 = { "1st + 2nd", "1st + 3rd", "2nd + 3rd" };
         for (int i = 0; i < 3; i++)
@@ -198,6 +201,9 @@ public class PuzzleGen {
                     clues.Add(new Clue(new string[] { dif2[i] }, new string[] { "<", "=", ">" }, new string[] { j + "" }, solution));
             }
         }
+        // 2 Difference Divisible by 2
+        for (int i = 0; i < 3; i++)
+            clues.Add(new Clue(new string[] { dif2[i] }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
         // Position Compares 2 Difference
         for (int i = 0; i < 3; i++)
             clues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", "=", ">" }, new string[] { dif2[2 - i] }, solution));
@@ -213,8 +219,10 @@ public class PuzzleGen {
         }
         // 3 Sum Divisible by 2
         clues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
+        clues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
+        clues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
         // 3 Sum Divisible by Position
-        foreach(string pos in pos1)
+        foreach (string pos in pos1)
             clues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/", "!/" }, new string[] { pos }, solution));
 
         //Special Clues
@@ -234,9 +242,6 @@ public class PuzzleGen {
         // Largest/Smallest
         specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { ">" }, new string[] { pos2[2], pos2[1], pos2[0] }, solution));
         specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { "<" }, new string[] { pos2[2], pos2[1], pos2[0] }, solution));
-        // Position Compares 2 Positions
-        for(int i = 0; i < 3; i++)
-            specialClues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", ">" }, new string[] { pos2[2 - i] }, solution));
         // Evens Compare Odds
         specialClues.Add(new Clue(new string[] { "Evens" }, new string[] { "<", ">" }, new string[] { "Odds" }, solution));
         // Evens Equals Numbers
@@ -286,10 +291,18 @@ public class PuzzleGen {
         hardClues.Add(new Clue(pos1, new string[] { "<" }, new string[] { sum2[2], sum2[1], sum2[0] }, solution));
         hardClues.Add(new Clue(pos1, new string[] { "=" }, new string[] { sum2[2], sum2[1], sum2[0] }, solution));
         hardClues.Add(new Clue(pos1, new string[] { ">" }, new string[] { sum2[2], sum2[1], sum2[0] }, solution));
-        // 2 Sums Divisible by Positions
-        hardClues.Add(new Clue(sum2, new string[] { "/" }, new string[] { pos1[2], pos1[1], pos1[0] }, solution));
-        hardClues.Add(new Clue(sum2, new string[] { "!/" }, new string[] { pos1[2], pos1[1], pos1[0] }, solution));
-
+        // 2 Sums Divisible by Position
+        foreach(string pos in pos1)
+            hardClues.Add(new Clue(sum2, new string[] { "/" }, new string[] { pos }, solution));
+        // 2 Sums Not Divisible by Position
+        foreach (string pos in pos1)
+            hardClues.Add(new Clue(sum2, new string[] { "!/" }, new string[] { pos }, solution));
+        // 2 Sum Divisible by Positions
+        foreach (string sum in sum2)
+            hardClues.Add(new Clue(new string[] { sum }, new string[] { "/" }, pos1, solution));
+        // 2 Sum Not Divisible by Positions
+        foreach (string sum in sum2)
+            hardClues.Add(new Clue(new string[] { sum }, new string[] { "!/" }, pos1, solution));
         //2 Differences Equals Number
         for (int i = 0; i <= 4; i++)
             hardClues.Add(new Clue(dif2, new string[] { "=" }, new string[] { i + "" }, solution));
@@ -302,10 +315,24 @@ public class PuzzleGen {
         //2 Differences Divisible by 2
         hardClues.Add(new Clue(dif2, new string[] { "/" }, new string[] { "2" }, solution));
         hardClues.Add(new Clue(dif2, new string[] { "!/" }, new string[] { "2" }, solution));
-        // Positions Compares 2 Differences
-        hardClues.Add(new Clue(pos1, new string[] { "<" }, new string[] { dif2[2], dif2[1], dif2[0] }, solution));
-        hardClues.Add(new Clue(pos1, new string[] { "=" }, new string[] { dif2[2], dif2[1], dif2[0] }, solution));
-        hardClues.Add(new Clue(pos1, new string[] { ">" }, new string[] { dif2[2], dif2[1], dif2[0] }, solution));
+        // Position Less Than 2 Differences
+        foreach(string pos in pos1)
+            hardClues.Add(new Clue(new string[] { pos }, new string[] { "<" }, dif2, solution));
+        // Position Equal To 2 Differences
+        foreach (string pos in pos1)
+            hardClues.Add(new Clue(new string[] { pos }, new string[] { "=" }, dif2, solution));
+        // Position Greater Than 2 Differences
+        foreach (string pos in pos1)
+            hardClues.Add(new Clue(new string[] { pos }, new string[] { ">" }, dif2, solution));
+        // Positions Less Than 2 Difference
+        foreach (string dif in dif2)
+            hardClues.Add(new Clue(pos1, new string[] { "<" }, new string[] { dif }, solution));
+        // Positions Equal To 2 Difference
+        foreach (string dif in dif2)
+            hardClues.Add(new Clue(pos1, new string[] { "=" }, new string[] { dif }, solution));
+        // Positions Greater Than 2 Difference
+        foreach (string dif in dif2)
+            hardClues.Add(new Clue(pos1, new string[] { ">" }, new string[] { dif }, solution));
 
         //3 Sum Divisible by Numbers
         hardClues.Add(new Clue(new string[] { "1st + 2nd + 3rd" }, new string[] { "/" }, new string[] { "3", "4", "5" }, solution));
