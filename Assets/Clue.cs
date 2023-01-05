@@ -116,28 +116,31 @@ public class Clue {
 	// Returns a boolean value by using the expression and a 3 digit number
 	private bool test(string left, string middle, string right, int[] digits)
 	{
-		switch(middle)
+		bool flag = true;
+		int[] l = strToValues(left, digits);
+		int[] r = strToValues(right, digits);
+		switch (middle)
 		{
 			case "<":
-				bool f1 = true;
-				int[] l1 = strToValues(left, digits);
-				int[] r1 = strToValues(right, digits);
-				for(int i = 0; i < l1.Length || i < r1.Length; i++)
-					f1 = f1 && (l1[i % l1.Length] < r1[i % r1.Length]);
-				return f1;
+				for(int i = 0; i < l.Length || i < r.Length; i++)
+					flag = flag && (l[i % l.Length] < r[i % r.Length]);
+				return flag;
 			case "=":
-				return strToValues(left, digits)[0] == strToValues(right, digits)[0];
+				for (int i = 0; i < l.Length || i < r.Length; i++)
+					flag = flag && (l[i % l.Length] == r[i % r.Length]);
+				return flag;
 			case ">":
-				bool f2 = true;
-				int[] l2 = strToValues(left, digits);
-				int[] r2 = strToValues(right, digits);
-				for (int i = 0; i < l2.Length || i < r2.Length; i++)
-					f2 = f2 && (l2[i % l2.Length] > r2[i % r2.Length]);
-				return f2;
+				for (int i = 0; i < l.Length || i < r.Length; i++)
+					flag = flag && (l[i % l.Length] > r[i % r.Length]);
+				return flag;
 			case "/":
-				return strToValues(left, digits)[0] % strToValues(right, digits)[0] == 0;
+				for (int i = 0; i < l.Length || i < r.Length; i++)
+					flag = flag && ((l[i % l.Length] % r[i % r.Length]) == 0);
+				return flag;
 			case "!/":
-				return strToValues(left, digits)[0] % strToValues(right, digits)[0] != 0;
+				for (int i = 0; i < l.Length || i < r.Length; i++)
+					flag = flag && ((l[i % l.Length] % r[i % r.Length]) != 0);
+				return flag;
 		}
 		return false;
 	}
