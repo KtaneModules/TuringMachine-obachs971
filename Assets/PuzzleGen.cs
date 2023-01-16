@@ -152,7 +152,7 @@ public class PuzzleGen {
         for(int i = 0; i < 3; i++)
         {
             for(int j = 2; j <= 4; j++)
-                clues.Add(new Clue(new string[] { pos2[i] }, new string[] { "<", ">" }, new string[] { j + "" }, solution));
+                clues.Add(new Clue(new string[] { pos2[i] }, new string[] { "<", "=", ">" }, new string[] { j + "" }, solution));
         }
         // 2 Position Divisible by 2
         foreach(string pos in pos2)
@@ -267,9 +267,13 @@ public class PuzzleGen {
         hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "/" }, new string[] { "2" }, solution));
         //Positions Not Divisible by 2
         hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "!/" }, new string[] { "2" }, solution));
-        // 2 Positions Compare Number
+        // 2 Positions Less Than Number
         for (int i = 2; i <= 5; i++)
             hardClues.Add(new Clue(pos2, new string[] { "<" }, new string[] { i + "" }, solution));
+        // 2 Positions Equal to Number
+        for (int i = 1; i <= 5; i++)
+            hardClues.Add(new Clue(pos2, new string[] { "=" }, new string[] { i + "" }, solution));
+        // 2 Positions Greater Than Number
         for (int i = 1; i <= 4; i++)
             hardClues.Add(new Clue(pos2, new string[] { ">" }, new string[] { i + "" }, solution));
         // 2 Positions Divisible by 2
