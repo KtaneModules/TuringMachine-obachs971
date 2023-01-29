@@ -151,8 +151,10 @@ public class PuzzleGen {
         string[] pos2 = { "1st and 2nd", "1st and 3rd", "2nd and 3rd" };
         for(int i = 0; i < 3; i++)
         {
-            for(int j = 2; j <= 4; j++)
+            clues.Add(new Clue(new string[] { pos2[i] }, new string[] { "=", ">" }, new string[] { "1" }, solution));
+            for (int j = 2; j <= 4; j++)
                 clues.Add(new Clue(new string[] { pos2[i] }, new string[] { "<", "=", ">" }, new string[] { j + "" }, solution));
+            clues.Add(new Clue(new string[] { pos2[i] }, new string[] { "<", "=" }, new string[] { "5" }, solution));
         }
         // 2 Position Divisible by 2
         foreach(string pos in pos2)
@@ -206,7 +208,10 @@ public class PuzzleGen {
             clues.Add(new Clue(new string[] { dif2[i] }, new string[] { "/", "!/" }, new string[] { "2" }, solution));
         // Position Compares 2 Difference
         for (int i = 0; i < 3; i++)
-            clues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", "=", ">" }, new string[] { dif2[2 - i] }, solution));
+        {
+            for(int j = 0; j < 3; j++)
+                clues.Add(new Clue(new string[] { pos1[i] }, new string[] { "<", "=", ">" }, new string[] { dif2[j] }, solution));
+        }
         // 3 Sum Compares Number
         for (int i = 3; i <= 15; i++)
         {
@@ -240,8 +245,8 @@ public class PuzzleGen {
         specialClues.Add(new Clue(new string[] { "Distinct Numbers" }, new string[] { "=" }, new string[] { "1", "2", "3" }, solution));
         specialClues.Add(new Clue(new string[] { "Distinct Numbers" }, new string[] { "=" }, new string[] { "1", "2", "3" }, solution));
         // Largest/Smallest
-        specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { ">" }, new string[] { pos2[2], pos2[1], pos2[0] }, solution));
-        specialClues.Add(new Clue(new string[] { pos1[0], pos1[1], pos1[2] }, new string[] { "<" }, new string[] { pos2[2], pos2[1], pos2[0] }, solution));
+        specialClues.Add(new Clue(pos1, new string[] { ">" }, new string[] { pos2[2], pos2[1], pos2[0] }, solution));
+        specialClues.Add(new Clue(pos1, new string[] { "<" }, new string[] { pos2[2], pos2[1], pos2[0] }, solution));
         // Evens Compare Odds
         specialClues.Add(new Clue(new string[] { "Evens" }, new string[] { "<", ">" }, new string[] { "Odds" }, solution));
         // Evens Equals Numbers
@@ -256,17 +261,17 @@ public class PuzzleGen {
 
         //Positions Equal Number
         for (int i = 1; i <= 5; i++)
-            hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "=" }, new string[] { i + "" }, solution));
+            hardClues.Add(new Clue(pos1, new string[] { "=" }, new string[] { i + "" }, solution));
         //Positions Less Than Number
         for (int i = 2; i <= 5; i++)
-            hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "<" }, new string[] { i + "" }, solution));
+            hardClues.Add(new Clue(pos1, new string[] { "<" }, new string[] { i + "" }, solution));
         //Positions Greater Than Number
         for (int i = 1; i <= 4; i++)
-            hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { ">" }, new string[] { i + "" }, solution));
+            hardClues.Add(new Clue(pos1, new string[] { ">" }, new string[] { i + "" }, solution));
         //Positions Divisible by 2
-        hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "/" }, new string[] { "2" }, solution));
+        hardClues.Add(new Clue(pos1, new string[] { "/" }, new string[] { "2" }, solution));
         //Positions Not Divisible by 2
-        hardClues.Add(new Clue(new string[] { "1st", "2nd", "3rd" }, new string[] { "!/" }, new string[] { "2" }, solution));
+        hardClues.Add(new Clue(pos1, new string[] { "!/" }, new string[] { "2" }, solution));
         // 2 Positions Less Than Number
         for (int i = 2; i <= 5; i++)
             hardClues.Add(new Clue(pos2, new string[] { "<" }, new string[] { i + "" }, solution));
